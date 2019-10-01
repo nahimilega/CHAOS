@@ -1,3 +1,9 @@
+// SPDX-License-Identifier: GPL
+/* 
+ * sys-sam.c - syscall for retrieving task_struct entries
+ * 
+ */
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/sched.h>
@@ -9,14 +15,22 @@
 #include <linux/string.h>
 #include <linux/init.h>
 #include <linux/fs.h>
-// #include <linux/buffer_read.h>
+#include <linux/buffer_read.h>
 #include <uapi/asm-generic/errno-base.h>
 #include <linux/file.h>
 
+/*
+   //This is not needed
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("MAALIK");
 MODULE_DESCRIPTION("HAIL SAMBUDDHO");
 MODULE_VERSION("1.0");
+*/
+
+/* 
+ * Writes 'data' upto size 'size' starting from 'offset' to a file descriptor 'file'
+ * Returns the number of bytes written
+ */
 
 int file_write(struct file *file, unsigned long long offset, unsigned char *data, unsigned int size) 
 {
@@ -32,6 +46,13 @@ int file_write(struct file *file, unsigned long long offset, unsigned char *data
     return ret;
 }
 
+/* 
+ * Traverses through the task_list and finds the corresponding task_struct
+ * prints the members in kernel log and also put them in a file
+ * in /home/maalik/code/ dir
+ * 
+ * Returns 0 for success, otherwise errno
+ */
 
 asmlinkage long sys_sh_task_info(pid_t pid_no, char *f_name)
 {
@@ -70,6 +91,9 @@ asmlinkage long sys_sh_task_info(pid_t pid_no, char *f_name)
 	return 0;
 }
 }
+
+/*
+   // this is not needed (it is a syscall not a module)
 static int __init sh_task_info_init(void){
 	long faltu=sys_sh_task_info(2,"lol.txt");
 	return 0;
@@ -81,3 +105,4 @@ static void __exit sh_task_info_exit(void){
 
 module_init(sh_task_info_init);
 module_exit(sh_task_info_exit);
+*/
